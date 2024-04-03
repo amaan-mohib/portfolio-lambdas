@@ -29,9 +29,9 @@ jobs:
           npm ci
       - name: deploy
         env:
-          MAIN_FUNCTION_URL: ${{ secrets.MAIN_FUNCTION_URL }}
+          MAIN_FUNCTION_URL: ${{ vars.MAIN_FUNCTION_URL }}
         run: |
           npx esbuild index.ts --bundle --outdir=dist --platform=node --minify
           zip -j deploy.zip ./dist/*
           echo "$MAIN_FUNCTION_URL"
-          aws lambda update-function-code --function-name=${{ secrets.MAIN_FUNCTION_URL }} --zip-file=fileb://deploy.zip
+          aws lambda update-function-code --function-name=$MAIN_FUNCTION_URL --zip-file=fileb://deploy.zip

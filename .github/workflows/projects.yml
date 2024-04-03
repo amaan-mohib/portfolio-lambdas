@@ -29,7 +29,7 @@ jobs:
           npm ci
       - name: deploy
         env:
-          PROJECTS_FUNCTION_URL: ${{ secrets.PROJECTS_FUNCTION_URL }}
+          PROJECTS_FUNCTION_URL: ${{ vars.PROJECTS_FUNCTION_URL }}
         run: |
           npx esbuild index.ts --bundle --outdir=dist --platform=node --minify
           zip -j deploy.zip ./dist/*

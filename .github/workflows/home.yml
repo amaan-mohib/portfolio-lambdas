@@ -29,7 +29,7 @@ jobs:
           npm ci
       - name: deploy
         env:
-          HOME_FUNCTION_URL: ${{ secrets.HOME_FUNCTION_URL }}
+          HOME_FUNCTION_URL: ${{ vars.HOME_FUNCTION_URL }}
         run: |
           npx esbuild index.ts --bundle --outdir=dist --platform=node --minify
           zip -j deploy.zip ./dist/*
