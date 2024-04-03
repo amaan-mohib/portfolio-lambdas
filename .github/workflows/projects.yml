@@ -1,0 +1,36 @@
+name: Deploy Projects Lambda
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy_projects_lambda:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./projects
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+      - name: npm install
+        env:
+          CI: true
+        run: |
+          npm ci
+      - name: deploy
+        env:
+          PROJECTS_FUNCTION_URL: ${{ secrets.PROJECTS_FUNCTION_URL }}
+        run: |
+          npx esbuild index.ts --bundle --outdir=dist --platform=node --minify
+          zip -j deploy.zip ./dist/*
+          aws lambda update-function-code --function-name=$PROJECTS_FUNCTION_URL --zip-file=fileb://deploy.zip

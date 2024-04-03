@@ -1,0 +1,25 @@
+{
+  "name": "links",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npx esbuild index.ts --bundle --outdir=dist --platform=node --minify",
+    "test": "lambda-local -h handler -l dist/index.js -e test-data.js -t 540"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@aws-sdk/client-s3": "^3.540.0",
+    "@types/aws-lambda": "^8.10.136",
+    "@types/node": "^20.12.3",
+    "esbuild": "^0.20.2",
+    "lambda-local": "^2.1.2",
+    "typescript": "^5.4.3"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.14",
+    "dotenv": "^16.4.5"
+  }
+}
