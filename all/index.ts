@@ -1,8 +1,4 @@
-import {
-  APIGatewayProxyEvent,
-  APIGatewayProxyResultV2,
-  Handler,
-} from "aws-lambda";
+import { APIGatewayProxyEvent, Handler } from "aws-lambda";
 import * as dotenv from "dotenv";
 
 const fetcher = async (input: URL | RequestInfo, options?: RequestInit) =>
@@ -10,21 +6,23 @@ const fetcher = async (input: URL | RequestInfo, options?: RequestInit) =>
 
 export const handler: Handler = async (
   event: APIGatewayProxyEvent
-): Promise<APIGatewayProxyResultV2> => {
+): Promise<any> => {
   try {
     dotenv.config();
 
-    [
-      process.env.HOME_FUNCTION_URL,
-      process.env.PROJECTS_FUNCTION_URL,
-      process.env.LINKS_FUNCTION_URL,
-    ].forEach((link) => {
-      fetcher(link);
-    });
+    const res = await Promise.all(
+      [
+        process.env.HOME_FUNCTION_URL,
+        process.env.PROJECTS_FUNCTION_URL,
+        process.env.LINKS_FUNCTION_URL,
+      ].map((link) => fetcher(link))
+    );
+
+    console.log(res);
 
     const response = {
       statusCode: 200,
-      body: "ok",
+      body: res,
     };
     return response;
   } catch (error) {
