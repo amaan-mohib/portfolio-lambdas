@@ -14,16 +14,17 @@ export const handler: Handler = async (
   try {
     dotenv.config();
 
-    await Promise.all(
-      [
-        process.env.HOME_FUNCTION_URL,
-        process.env.PROJECTS_FUNCTION_URL,
-        process.env.LINKS_FUNCTION_URL,
-      ].map((link) => fetcher(link))
-    );
+    [
+      process.env.HOME_FUNCTION_URL,
+      process.env.PROJECTS_FUNCTION_URL,
+      process.env.LINKS_FUNCTION_URL,
+    ].forEach((link) => {
+      fetcher(link);
+    });
 
     const response = {
       statusCode: 200,
+      body: "ok",
     };
     return response;
   } catch (error) {
