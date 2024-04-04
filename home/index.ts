@@ -232,6 +232,8 @@ export const handler: Handler = async (
               color: el.color,
             });
           });
+        } else if (entry.type === "formula") {
+          value = (entry.formula as unknown as any).string;
         }
         project[projectTitleKeyMap[key]] = value;
       });
