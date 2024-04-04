@@ -20,6 +20,8 @@ interface IProject {
   description: string;
   languages: { name: string; color: string }[];
   image: string;
+  fallbackName: string;
+  slug: string;
 }
 
 const getHTMLTagsFromAnnotations = (
@@ -112,6 +114,8 @@ export const handler: Handler = async (
       Description: "description",
       Languages: "languages",
       URL: "url",
+      "Fallback name": "fallbackName",
+      Slug: "slug",
     };
 
     let description = "";
@@ -139,6 +143,8 @@ export const handler: Handler = async (
         image: "",
         languages: [],
         url: "",
+        fallbackName: "",
+        slug: "",
       };
       Object.entries(result.properties).forEach(([key, entry]) => {
         if (!(key in projectTitleKeyMap)) return;
